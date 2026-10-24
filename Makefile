@@ -165,7 +165,7 @@ ccflags-y += -DCONFIG_KERNSC_PATCH -DCONFIG_KERNSC_DISCOVER
 all:
 	@mkdir -p $(sort $(dir $(addprefix $(ODIR)/,$(droid_lkm-y) $(droid_lkm_vendor-y) $(droid_lkm_misc-y))))
 	# 6.18 kbuild derives src from srcroot, older kernels ignore it
-	make -C $(KDIR) M=$(ODIR) src=$(MDIR) srcroot=$(MDIR) modules
+	make -C $(KDIR) M=$(ODIR) src=$(MDIR) srcroot=$(MDIR) KERNELRELEASE=$(KERNELRELEASE) modules
 clean:
 	make -C $(KDIR) M=$(ODIR) src=$(MDIR) srcroot=$(MDIR) clean
 
