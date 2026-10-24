@@ -164,6 +164,11 @@ ccflags-y += -DCONFIG_KERNSC_PATCH -DCONFIG_KERNSC_DISCOVER
 
 all:
 	@mkdir -p $(sort $(dir $(addprefix $(ODIR)/,$(droid_lkm-y) $(droid_lkm_vendor-y) $(droid_lkm_misc-y))))
+	# Force the kernel tree to regenerate vermagic with our KERNELRELEASE.
+	# External-module builds reuse the DDK's pre-prepared kernel tree, so the
+	# override must be pushed into utsrelease.h before compiling the ko.
+	-rm -f $(KDIR)/include/generated/utsrelease.h $(KDIR)/include/config/kernel.release
+	-$(MAKE) -C $(KDIR) KERNELRELEASE=$(KERNELRELEASE) modules_prepare
 	# 6.18 kbuild derives src from srcroot, older kernels ignore it
 	make -C $(KDIR) M=$(ODIR) src=$(MDIR) srcroot=$(MDIR) KERNELRELEASE=$(KERNELRELEASE) modules
 clean:
